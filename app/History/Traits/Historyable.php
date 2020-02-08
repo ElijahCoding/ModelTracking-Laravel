@@ -31,7 +31,7 @@ trait Historyable
     {
         return collect(
             array_diff(
-                $model->getChanges(),
+                Arr::except($model->getChanges(), $this->ignoreHistoryColumns()),
                 $original = $model->getOriginal()
             )
         )->map(function ($change, $column) use ($original) {
@@ -47,5 +47,13 @@ trait Historyable
     {
         return $this->morphMany(History::class, 'historyable')
             ->latest();
+    }
+
+    public function ignoreHistoryColumns()
+    {
+        return [
+            'updated_at',
+            'password'
+        ];
     }
 }
