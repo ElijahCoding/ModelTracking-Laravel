@@ -2,13 +2,14 @@
 
 namespace App;
 
+use App\History\Traits\Historyable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Historyable;
 
     /**
      * The attributes that are mass assignable.
@@ -36,10 +37,4 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
-
-    public function history()
-    {
-        return $this->morphMany(History::class, 'historyable')
-            ->latest();
-    }
 }
