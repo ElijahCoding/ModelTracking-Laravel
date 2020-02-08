@@ -5,6 +5,7 @@ namespace App\History\Traits;
 use App\History;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use App\History\ColumnChange;
 
 trait Historyable
 {
@@ -23,11 +24,11 @@ trait Historyable
                 $original = $model->getOriginal()
             )
         )->map(function ($change, $column) use ($original) {
-            return [
-                'column' => $column,
-                'from' => Arr::get($original, $column),
-                'to' => $change
-            ];
+            return new ColumnChange(
+                $column,
+                Arr::get($original, $column),
+                $change
+            );
         });
     }
 
